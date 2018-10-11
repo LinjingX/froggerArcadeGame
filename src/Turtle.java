@@ -83,7 +83,7 @@ public class Turtle extends MovingObject {
         return this.moveRight;
     }
 
-    public boolean getAppear(){
+    public boolean getAppear() {
         return this.appear;
     }
 }

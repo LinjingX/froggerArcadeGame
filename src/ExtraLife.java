@@ -13,13 +13,13 @@ public class ExtraLife extends MovingObject {
     int count = 0;
 
     public ExtraLife(float x, float y, boolean moveRight, float speed, int logLength) {
-        super(ASSET_PATH, x, y, new String[] { Sprite.EXTRA }, moveRight);
+        super(ASSET_PATH, x, y, new String[]{Sprite.EXTRA}, moveRight);
         this.speed = speed;
         this.logLength = logLength;
     }
 
     public final float getInitialX() {
-        return moveRight ? -(World.TILE_SIZE * logLength)/ 2
+        return moveRight ? -(World.TILE_SIZE * logLength) / 2
                 : App.SCREEN_WIDTH + (World.TILE_SIZE * logLength) / 2;
     }
 
@@ -36,16 +36,16 @@ public class ExtraLife extends MovingObject {
         long diff3 = World.currentTime.getTime() - extraLifeDisappearTime.getTime();
         long diff3Seconds = diff3 / 1000 % 60;
 
-//        if (diff3Seconds >= World.randomTime && extraLifeBeginAppear == false) {
-//            System.out.println("Extra live appear");
-//            extraLifeBeginAppear = true;
-//            extraLifeAppearTime = cal.getTime();
-//            World.startTime = cal.getTime();
-//        }
+        if (diff3Seconds >= World.randomTime && extraLifeBeginAppear == false) {
+            System.out.println("Extra life appear");
+            extraLifeBeginAppear = true;
+            extraLifeAppearTime = cal.getTime();
+            World.startTime = cal.getTime();
+        }
 
         if (extraLifeBeginAppear == false) {
             if (diffSeconds >= World.randomTime) {
-                System.out.println("Extra live appear");
+                System.out.println("Extra life appear");
                 extraLifeBeginAppear = true;
                 extraLifeAppearTime = cal.getTime();
                 World.startTime = cal.getTime();
@@ -55,23 +55,23 @@ public class ExtraLife extends MovingObject {
             long diff2Seconds = diff2 / 1000 % 60;
 
             if (diff2Seconds >= 14) {
-                System.out.println("Extra live disappear");
+                System.out.println("Extra life disappear");
                 extraLifeBeginAppear = false;
                 extraLifeDisappearTime = cal.getTime();
             } else if (diffSeconds >= 2) {
                 System.out.println("Move left or right");
-                if(logLength == 3){
-                    if(count == 0){
-                        setX(getX()+World.TILE_SIZE);
-                    }else if(1<= count && count <= 3){
-                        setX(getX()-World.TILE_SIZE);
-                    }else if(4<= count && count <= 6){
-                        setX(getX()+World.TILE_SIZE);
-                    }
-                }else if(logLength == 5){
-                    if(0<=count && count<=1) {
+                if (logLength == 3) {
+                    if (count == 0) {
                         setX(getX() + World.TILE_SIZE);
-                    }else if(2<=count && count<=6){
+                    } else if (1 <= count && count <= 3) {
+                        setX(getX() - World.TILE_SIZE);
+                    } else if (4 <= count && count <= 6) {
+                        setX(getX() + World.TILE_SIZE);
+                    }
+                } else if (logLength == 5) {
+                    if (0 <= count && count <= 1) {
+                        setX(getX() + World.TILE_SIZE);
+                    } else if (2 <= count && count <= 6) {
                         setX(getX() - World.TILE_SIZE);
                     }
                 }
@@ -83,10 +83,16 @@ public class ExtraLife extends MovingObject {
 
         move(speed * delta * (moveRight ? 1 : -1), 0);
 
-        // check if the vehicle has moved off the screen
-        if (getX() > App.SCREEN_WIDTH + (World.TILE_SIZE * logLength)/ 2 || getX() < -(World.TILE_SIZE * logLength)/ 2
+        // check if the extralife has moved off the screen
+        if (getX() > App.SCREEN_WIDTH + (World.TILE_SIZE * logLength) / 2 || getX() < -(World.TILE_SIZE * logLength) / 2
                 || getY() > App.SCREEN_HEIGHT + (World.TILE_SIZE) / 2 || getY() < -(World.TILE_SIZE) / 2) {
             setX(getInitialX());
+        }
+    }
+
+    public void render() {
+        if (extraLifeBeginAppear == true) {
+            getImage().drawCentered(getX(), getY());
         }
     }
 }
