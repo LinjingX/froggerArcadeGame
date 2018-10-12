@@ -1,20 +1,37 @@
-import org.lwjgl.Sys;
 import org.newdawn.slick.Input;
 
+/**
+ * represent the frog that can be controlled by the player
+ */
 public class Player extends Sprite {
     private static final String ASSET_PATH = "assets/frog.png";
     private static float speed;
     private static boolean moveRight;
+    /**
+     * a boolean to check whether the player is on rideable object
+     */
     public boolean ride = false;
+    /**
+     * the life number of player
+     */
     public static int lifeNum = 3;
 
+    /**
+     * constructor
+     * @param x x axis value
+     * @param y y axis value
+     */
     public Player(float x, float y) {
         super(ASSET_PATH, x, y);
     }
 
+    /**
+     * update the changes made to the player's character
+     * @param input the key board input
+     * @param delta a constant used to make sure object move at the same speed no matter how fast the game is running
+     */
     @Override
     public void update(Input input, int delta) {
-        //canMove = true;
         int dx = 0,
                 dy = 0;
         if (input.isKeyPressed(Input.KEY_LEFT)) {
@@ -47,31 +64,35 @@ public class Player extends Sprite {
         for (Sprite sprite : World.sprites) {
             if (sprite.hasTag(Sprite.SOLID)) {
                 if (this.collides(sprite)) {
-                    System.out.println("Solid tree");
+                    // if player collides with a solid object, the x and y will not change
                     move(-dx, -dy);
                 }
             }
         }
     }
 
+    /**
+     * the actions that should be done if player collides with specific types of sprite
+     * @param other the sprite that collides with player
+     * @param delta a constant used to make sure object move at the same speed no matter how fast the game is running
+     */
     @Override
     public void onCollision(Sprite other, int delta) {
-
+        // player collide with bulldozer
         if (other.hasTag(Sprite.BULLDOZER)) {
             setX(other.getX() + World.TILE_SIZE);
             setY(other.getY());
-//            speed = other.getSpeed();
-//            moveRight = false;
-//            System.out.println(speed);
-//            System.out.println(moveRight);
-//            move(speed * delta * (moveRight ? 1 : -1), 0);
         }
+
+        // player step onto a rideable object
         if (other.hasTag(Sprite.RIDEABLE) && getY() == other.getY()) {
             speed = other.getSpeed();
             moveRight = other.getMoveRight();
             ride = true;
+            // if the rideable object is turtle
             if (other instanceof Turtle) {
-                if (!((Turtle) other).getAppear()) {
+                // if turtle is currently in the water
+                if (!((Turtle) other).isAppear()) {
                     if (lifeNum > 1) {
                         lifeNum -= 1;
                         setX(App.SCREEN_WIDTH / 2);
@@ -81,8 +102,11 @@ public class Player extends Sprite {
                     }
                 }
             }
+            // move with the rideable object
             move(speed * delta * (moveRight ? 1 : -1), 0);
         }
+
+        // player is colliding with other sprite and is pushed off screen
         if (this.getX() + World.TILE_SIZE / 2 > App.SCREEN_WIDTH ||
                 this.getX() - World.TILE_SIZE / 2 < 0) {
             if (lifeNum > 1) {
@@ -93,6 +117,8 @@ public class Player extends Sprite {
                 System.exit(0);
             }
         }
+
+        // player not on rideable object and collides with hazard object
 //        if (ride == false) {
 //            if (other.hasTag(Sprite.HAZARD)) {
 //                if(lifeNum > 1){
@@ -105,34 +131,4 @@ public class Player extends Sprite {
 //            }
 //        }
     }
-    /*
-	public void onCollision(MovingObject other, int delta){
-        if (other.hasTag(Sprite.BULLDOZER)){
-            setX(other.getX() + World.TILE_SIZE);
-            setY(other.getY());
-            speed = Bulldozer.SPEED;
-            moveRight = other.getMoveRight();
-
-        }
-        if(other.hasTag(Sprite.RIDEABLE)){
-            speed = other.getSpeed();
-            moveRight = other.getMoveRight();
-        }
-        move(speed * delta * (moveRight ? 1 : -1), 0);
-        if(this.getX() + World.TILE_SIZE / 2 > App.SCREEN_WIDTH ||
-                this.getX() - World.TILE_SIZE / 2 < 0) {
-            System.exit(0);
-        }
-    }
-	/*
-	public void update(MovingObject other, int delta){
-        if (other.hasTag(Sprite.BULLDOZER)){
-            setX(other.getX() + World.TILE_SIZE);
-            setY(other.getY());
-            speed = Bulldozer.SPEED;
-            moveRight = other.getMoveRight();
-            move(speed * delta * (moveRight ? 1 : -1), 0);
-            //if(this.getX() > App.SCREEN_WIDTH)
-        }
-    }*/
 }
