@@ -119,16 +119,16 @@ public class Player extends Sprite {
         }
 
         // player not on rideable object and collides with hazard object
-//        if (ride == false) {
-//            if (other.hasTag(Sprite.HAZARD)) {
-//                if(lifeNum > 1){
-//                    lifeNum -= 1;
-//                    setX(App.SCREEN_WIDTH / 2);
-//                    setY(App.SCREEN_HEIGHT - World.TILE_SIZE);
-//                }else{
-//                    System.exit(0);
-//                }
-//            }
-//        }
+        if (ride == false) {
+            if (other.hasTag(Sprite.HAZARD)) {
+                if(lifeNum > 1){
+                    lifeNum -= 1;
+                    setX(App.SCREEN_WIDTH / 2);
+                    setY(App.SCREEN_HEIGHT - World.TILE_SIZE);
+                }else{
+                    System.exit(0);
+                }
+            }
+        }
     }
 }

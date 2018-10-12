@@ -19,6 +19,7 @@ public class World {
     public static final int TILE_SIZE = 48;
     private static final int FIRSTLIFE_X = 24;
     private static final int FIRSTLIFE_Y = 744;
+    private static final int LIFE_INTERVAL = 32;
     private static final int HOLE1_L_X = 72;
     private static final int HOLE1_R_X = 168;
     private static final int HOLE2_L_X = 264;
@@ -79,7 +80,7 @@ public class World {
         randomTime = generator();
         Calendar cal = Calendar.getInstance();
         startTime = cal.getTime();
-        System.out.println("RandomTime is " + randomTime);
+        //System.out.println("RandomTime is " + randomTime);
     }
 
     //generate a random number (time in seconds), to be used for extra life
@@ -135,7 +136,7 @@ public class World {
         lives.add(Tile.createLifeTile(FIRSTLIFE_X, FIRSTLIFE_Y));
         // calculate the location of the rest of the icons
         for (int i = 1; i < Player.lifeNum; i++) {
-            lives.add(Tile.createLifeTile(lives.get(lives.size() - 1).getX() + 32, 744));
+            lives.add(Tile.createLifeTile(lives.get(lives.size() - 1).getX() + LIFE_INTERVAL, FIRSTLIFE_Y));
         }
 
         //check if the play collides with the extra life
@@ -275,7 +276,7 @@ public class World {
             extraLife.add(new ExtraLife(randomLog.getX(), randomLog.getY(), randomLog.getMoveRight(),
                     randomLog.getSpeed(), ((LongLog) randomLog).getLength()));
         }
-        System.out.println("Random log index = " + index);
+        //System.out.println("Random log index = " + index);
     }
 
     // check whether the player has entered any hole

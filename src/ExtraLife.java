@@ -40,6 +40,7 @@ public class ExtraLife extends MovingObject {
         this.speed = speed;
         this.logLength = logLength;
     }
+
     /**
      * get the x value where the extra life should be reset to
      * @return the initial x value
@@ -63,29 +64,40 @@ public class ExtraLife extends MovingObject {
             extraLifeDisappearTime = cal.getTime();
         }
 
-        long disappear_time = World.currentTime.getTime() - World.startTime.getTime();
-        long disappear_time_seconds = disappear_time / MILISECONDS_PER_SECOND % SECONDS_60;
+        long diff = World.currentTime.getTime() - World.startTime.getTime();
+        long diffSeconds = diff / MILISECONDS_PER_SECOND % SECONDS_60;
 
-        // extra life is not on screen
-        if (!extraLifeBeginAppear) {
+        long diff3 = World.currentTime.getTime() - extraLifeDisappearTime.getTime();
+        long diff3Seconds = diff3 / MILISECONDS_PER_SECOND % SECONDS_60;
+
+        if (diff3Seconds >= World.randomTime && extraLifeBeginAppear == false) {
+            //System.out.println("Extra life re-appear");
+            extraLifeBeginAppear = true;
+            extraLifeAppearTime = cal.getTime();
+            World.startTime = cal.getTime();
+        } else if (extraLifeBeginAppear == false) {
+            // extra life is not on screen
             // and it disappears for a time that is longer than the random time
-            if (disappear_time_seconds >= World.randomTime) {
+            if (diffSeconds >= World.randomTime) {
                 // new extra life should be placed
                 World.putExtraLife();
+                //System.out.println("Extra life appear");
                 extraLifeBeginAppear = true;
                 extraLifeAppearTime = cal.getTime();
                 World.startTime = cal.getTime();
             }
         } else {
-            long appear_time = World.currentTime.getTime() - extraLifeAppearTime.getTime();
-            long appear_time_seconds = appear_time / MILISECONDS_PER_SECOND % SECONDS_60;
-
+            long diff2 = World.currentTime.getTime() - extraLifeAppearTime.getTime();
+            long diff2Seconds = diff2 / MILISECONDS_PER_SECOND % SECONDS_60;
             // extra life appears for more than 14 seconds, it should disappear
-            if (appear_time_seconds >= SECONDS_14) {
+            if (diff2Seconds >= SECONDS_14) {
+                //System.out.println("Extra life disappear");
                 extraLifeBeginAppear = false;
                 extraLifeDisappearTime = cal.getTime();
-            } else if (appear_time_seconds >= SECONDS_2) {
+                //System.out.println(extraLifeDisappearTime);
+            } else if (diffSeconds >= SECONDS_2) {
                 // jump for every 2 seconds
+                //System.out.println("Move left or right");
                 if (logLength == LOG_SIZE_3) {
                     if (count == 0) {
                         setX(getX() + World.TILE_SIZE);
@@ -93,7 +105,7 @@ public class ExtraLife extends MovingObject {
                         setX(getX() - World.TILE_SIZE);
                     } else if (3 <= count && count <= 4) {
                         setX(getX() + World.TILE_SIZE);
-                    } else if (5 <= count && count <= 6){
+                    }else if (5 <= count && count <= 6){
                         setX(getX() - World.TILE_SIZE);
                     }
                 } else if (logLength == LOG_SIZE_5) {
@@ -104,7 +116,7 @@ public class ExtraLife extends MovingObject {
                     }
                 }
                 count += 1;
-                System.out.println(count);
+                //System.out.println(count);
                 // reset the start time of the period to be the current time
                 World.startTime = cal.getTime();
             }
@@ -123,7 +135,7 @@ public class ExtraLife extends MovingObject {
      * render the extra life if it should appear and vise versa
      */
     public void render() {
-        if (extraLifeBeginAppear) {
+        if (extraLifeBeginAppear == true) {
             getImage().drawCentered(getX(), getY());
         }
     }

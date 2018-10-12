@@ -1,6 +1,7 @@
-import org.newdawn.slick.Input;
-
-public class Bulldozer extends MovingObject {
+/**
+ * represent the bulldozer, it can push the player
+ */
+public class Bulldozer extends Vehicle {
     private static final String ASSET_PATH = "assets/bulldozer.png";
     /**
      * the speed of all bulldozers
@@ -17,20 +18,6 @@ public class Bulldozer extends MovingObject {
         super(ASSET_PATH, x, y, new String[] { Sprite.BULLDOZER, Sprite.SOLID }, moveRight);
     }
 
-    /**
-     * update the changes made to the bulldozer
-     * @param input the key board input
-     * @param delta a constant used to make sure object move at the same speed no matter how fast the game is running
-     */
-    public void update(Input input, int delta) {
-        move(SPEED * delta * (moveRight ? 1 : -1), 0);
-
-        // check if the bulldozer has moved off the screen
-        if (getX() > App.SCREEN_WIDTH + World.TILE_SIZE / 2 || getX() < -World.TILE_SIZE / 2
-                || getY() > App.SCREEN_HEIGHT + World.TILE_SIZE / 2 || getY() < -World.TILE_SIZE / 2) {
-            setX(getInitialX());
-        }
-    }
 
     /**
      * get the speed of the bulldozer

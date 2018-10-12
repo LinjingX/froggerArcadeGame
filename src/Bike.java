@@ -3,7 +3,7 @@ import org.newdawn.slick.Input;
 /**
  * represent the bike , which will hit the player
  */
-public class Bike extends MovingObject{
+public class Bike extends Vehicle{
     private static final String ASSET_PATH = "assets/bike.png";
     private static final float SPEED = 0.2f;
     private static final float CHANGE_DIRECTION_1 = 24;
@@ -31,7 +31,7 @@ public class Bike extends MovingObject{
         // check if the vehicle has moved off the screen
         if (getX() > App.SCREEN_WIDTH + World.TILE_SIZE / 2 || getX() < -World.TILE_SIZE / 2
                 || getY() > App.SCREEN_HEIGHT + World.TILE_SIZE / 2 || getY() < -World.TILE_SIZE / 2) {
-            setX(super.getInitialX());
+            setX(getInitialX());
         }
 
         if(getX() <= CHANGE_DIRECTION_1){
