@@ -1,5 +1,6 @@
 /**
- * Sample Project for SWEN20003: Object Oriented Software Development 2018
+ * The Player, World, MovingObject classes are adapted from the following:
+ * Sample Project1 for SWEN20003: Object Oriented Software Development 2018
  * by Eleanor McMurtry, University of Melbourne
  */
 
